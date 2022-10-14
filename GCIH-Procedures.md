@@ -13,3 +13,10 @@
 #### Find newly created accounts with admni rights (persistence)
 - list admins `net localgroup administrators`
 - find most recent created account in event logs `Get-WinEvent Security | Where-object Id -eq '4720' | fl TimeCreated, Message`
+
+
+### Attack
+#### Pivoting
+- If you SSH'd into a host check `ifconfig` to see what ranges to scan are avaible on other interphases
+- If nmap is not present use `nc` for scanning
+
