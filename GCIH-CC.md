@@ -94,23 +94,22 @@ use parenthesis to group as needed
 ```
 	
 ## tcpdump (pcapng supports comments):
-```
-uses BPFs
-tcpdump -r <file.pcap> 'src host <ip>'
-```
+Uses BPF
+e.g., `tcpdump -r <file.pcap> 'src host <ip>'`
+
 	
 ## NMAP  
-```
-(if you SSHed into a host check ifconfig to see what ranges to scan are avaible) 
-(if nmap is not present use net cat for scanning)
-sudo nmap -p0-10000 <dest IP or CIDR>
-hostscan -sn 192.168.0.0/24   (it uses ICMP echo, ICMP Timestamp, and a few other methods)
-aggressive scan -A  (use this on test)
---script  <script name> --script-args <script args name=arg value>
---reason to show why it was determined up/down open/closed
--p- (all) ports -p 0-1024  (range) -p 1,2,3  (list)
--sV for version will do more tests to get what service name. server, etc is running. (includded in -A command)
-```
+- example `Sudo nmap -p0-10000 <dest IP or CIDR>`
+- hostscan `nmap -sn 192.168.0.0/24`   (it uses ICMP echo, ICMP Timestamp, and a few other methods)
+- Aggressive scan -A
+- It supports lots of scripts `--script  <script name> --script-args <script args name=arg value>`
+- to output reason for determination (up/down) (open/closed) `--reason`
+- Define port range: 
+  - `-p-` (all) ports 
+  - -p 0-1024  (range) 
+  - -p 1,2,3  (list)
+- Version Scan `-sV` for version will do more tests to get what service name. server, etc is running. (includded in -A command)
+
 
 
 
