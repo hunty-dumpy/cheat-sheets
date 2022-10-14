@@ -119,8 +119,7 @@ Practice searching for payload and exploits inside of metasploit: `search type:e
 
 
 ## volatility
-```
-print the sans cheat sheet
+Print the sans cheat sheet
 - Use 
     `export VOLATILITY_LOCATION="file:///home/...././/file.mem"`	
     `export VOLATILITY_PROFILE="Win..."`
@@ -140,20 +139,20 @@ print the sans cheat sheet
 | 6 | Hybrid Wordlist + Mask |
 | 7 | Hybrid Mask + Wordlist |
 | 9 | Association |
-  
 
 
 ### John The Ripper
 *if you don't specify a is defaults to a (--single) attack mode where it uses wordlist generated from the passwd file GECOS fields for each user *combinator attack is part of hashcat*
-    ```
-    unshadow passwd shadow > combined
-	john combined
-    ```
+```
+unshadow passwd shadow > combined
+john combined
+```
+
 #### Parmeters
 ##### Attack types
 - `--single`
 - `--wordlist=\path\to\wodlist.txt`
-- 
+
 ##### Show 
 - `--show` to show all passwords (cracked and missing) 
 - `--show=left` to show uncracked ones
@@ -217,7 +216,7 @@ print the sans cheat sheet
 	`smbclient -U <user> //<ip>/<sharename> -m SMB2`  (optional param)
 
 
-## Who's Who of NET Something
+## Who's Who of NET $Something
 
 ### NET.EXE commands 
 https://ss64.com/nt/net.html
