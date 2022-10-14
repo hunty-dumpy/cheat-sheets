@@ -23,8 +23,8 @@
 ### execute EXE in an ADS
     `wmic process call create C:\temp\text.txt:nc.exe`
 ### How to find ADS
-1. Use LADS tool by Frank Heyne
-2. dir /r
+1. Use `LADS` tool by Frank Heyne
+2. `dir /r`
 3. powershell (replace * by unique files,paths, or stream names as needed. 
     `Get-Item * -stream *`
     `Get-Content * -Stream *`
